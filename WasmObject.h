@@ -1,6 +1,6 @@
 /*
  * WasmObject.h
- * WebAssembly COM interface (Header)
+ * WebAssembly COM interface
  
  * [IWebAssemblyCOM]
  * Copyright (C) 2022 AsmNext Team.  All rights reserved. 
