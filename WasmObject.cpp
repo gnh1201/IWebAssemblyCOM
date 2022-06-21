@@ -1,6 +1,6 @@
 /*
  * WasmObject.h
- * WebAssembly COM interface (Header)
+ * WebAssembly COM interface
  
  * [IWebAssemblyCOM]
  * Copyright (C) 2022 AsmNext Team.  All rights reserved. 
@@ -11,7 +11,6 @@
  * SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 */
 
-#include <windows.h>
 #include <objbase.h>
 
 #include "WasmObject.h"
@@ -75,7 +74,27 @@ HRESULT __stdcall WasmObject::SetHeapSize(int Size) {
 }
 
 HRESULT __stdcall WasmObject::Open(LPSTR FilePath) {
-    // Not implemented
+    static char global_heap_buf[512 * 1024];
+    char *buffer, error_buf[128];
+    char *wasm_path = NULL;
+
+    wasm_module_t module = NULL;
+    wasm_module_inst_t module_inst = NULL;
+    wasm_exec_env_t exec_env = NULL;
+    uint32 buf_size, stack_size = 8092, heap_size = 8092;
+    wasm_function_inst_t func = NULL;
+    wasm_function_inst_t func2 = NULL;
+    char *native_buffer = NULL;
+    uint32_t wasm_buffer = 0;
+	
+    RuntimeInitArgs init_args;
+    memset(&init_args, 0, sizeof(RuntimeInitArgs));
+	
+    init_args.mem_alloc_type = Alloc_With_Pool;
+    init_args.mem_alloc_option.pool.heap_buf = global_heap_buf;
+    init_args.mem_alloc_option.pool.heap_size = sizeof(global_heap_buf);
+
+	// ... todo ...
 }
 
 HRESULT __stdcall WasmObject::Exec() {
