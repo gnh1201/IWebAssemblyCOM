@@ -11,10 +11,11 @@
  * SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 */
 
-#include <windows.h>
 #include <vector>
 
 #include "IWebAssemblyCOM.h"
+
+extern long g_nComObjsInUse;
 
 using namespace std;
 
@@ -48,6 +49,6 @@ private:
     int StackSize = 8092;
     int HeapSize = 8092;
     char ErrorBuffer[128];
-	long m_nRefCount;   //for managing the reference count
+    long m_nRefCount;   //for managing the reference count
 }
 
