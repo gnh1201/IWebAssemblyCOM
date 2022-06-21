@@ -15,6 +15,10 @@
 
 #include "IWebAssemblyCOM.h"
 
+#include "wasm_export.h"
+#include "bh_read_file.h"
+#include "bh_getopt.h"
+
 extern long g_nComObjsInUse;
 
 using namespace std;
@@ -50,5 +54,13 @@ private:
     int HeapSize = 8092;
     char ErrorBuffer[128];
     long m_nRefCount;   //for managing the reference count
+
+    // WebAssembly environment
+    char global_heap_buf[512 * 1024];
+    char *buffer, error_buf[128];
+    char *wasm_path = NULL;
+    wasm_module_t module = NULL;
+    wasm_module_inst_t module_inst = NULL;
+    wasm_exec_env_t exec_env = NULL;
 }
 

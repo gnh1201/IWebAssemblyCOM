@@ -16,10 +16,6 @@
 #include "WasmObject.h"
 #include "IWebAssemblyCOM_i.c"
 
-#include "wasm_export.h"
-#include "bh_read_file.h"
-#include "bh_getopt.h"
-
 HRESULT __stdcall WasmObject::QueryInterface(REFIID riid, void ** ppObj) {
     if (riid == IID_IUnknown) {
         * ppObj = static_cast(this);
@@ -74,37 +70,101 @@ HRESULT __stdcall WasmObject::SetHeapSize(int Size) {
 }
 
 HRESULT __stdcall WasmObject::Open(LPSTR FilePath) {
-    static char global_heap_buf[512 * 1024];
-    char *buffer, error_buf[128];
-    char *wasm_path = NULL;
+    uint32 buf_size;
+    stack_size = (uint32)StackSize;
+    heap_size = (uint32)HeapSize;
 
-    wasm_module_t module = NULL;
-    wasm_module_inst_t module_inst = NULL;
-    wasm_exec_env_t exec_env = NULL;
-    uint32 buf_size, stack_size = 8092, heap_size = 8092;
-    wasm_function_inst_t func = NULL;
-    wasm_function_inst_t func2 = NULL;
-    char *native_buffer = NULL;
-    uint32_t wasm_buffer = 0;
-	
     RuntimeInitArgs init_args;
     memset(&init_args, 0, sizeof(RuntimeInitArgs));
-	
+
     init_args.mem_alloc_type = Alloc_With_Pool;
     init_args.mem_alloc_option.pool.heap_buf = global_heap_buf;
     init_args.mem_alloc_option.pool.heap_size = sizeof(global_heap_buf);
 
-	// ... todo ...
+    if (!wasm_runtime_full_init(&init_args)) {
+        printf("Init runtime environment failed.\n");
+        return -1;
+    }
+
+    buffer = bh_read_file_to_buffer(wasm_path, &buf_size);
+
+    if (!buffer) {
+        printf("Open wasm app file [%s] failed.\n", wasm_path);
+        Close();
+    }
+
+    module = wasm_runtime_load(buffer, buf_size, error_buf, sizeof(error_buf));
+    if (!module) {
+        printf("Load wasm module failed. error: %s\n", error_buf);
+        Close();
+    }
+
+    module_inst = wasm_runtime_instantiate(module, stack_size, heap_size,
+                                           error_buf, sizeof(error_buf));
+
+    if (!module_inst) {
+        printf("Instantiate wasm module failed. error: %s\n", error_buf);
+        Close();
+    }
+
+    exec_env = wasm_runtime_create_exec_env(module_inst, stack_size);
+    if (!exec_env) {
+        printf("Create wasm execution environment failed.\n");
+        Close();
+    }
 }
 
 HRESULT __stdcall WasmObject::Exec() {
-    // Not implemented
+    if (!(func = wasm_runtime_lookup_function(module_inst, "main", NULL))) {
+        printf("Could not find main()");
+        Close();
+    }
+	
+    wasm_val_t arguments[3] = {
+        { .kind = WASM_I32, .of.i32 = 10 },
+        { .kind = WASM_F64, .of.f64 = 0.000101 },
+        { .kind = WASM_F32, .of.f32 = 300.002 },
+    };
+
+	wasm_runtime_call_wasm_a(exec_env, func, 1, NULL, 3, arguments);
 }
 
 HRESULT __stdcall WasmObject::CallFunc(LPSTR FuncName, LPVOID pArgs) {
-    // Not implemented
+    wasm_function_inst_t func = NULL;
+
+    if (!(func = wasm_runtime_lookup_function(module_inst, FuncName, NULL))) {
+        printf("The generate_float wasm function is not found.\n");
+    }
+
+    wasm_val_t results[1] = { { .kind = WASM_F32, .of.f32 = 0 } };
+    wasm_val_t arguments[3] = {
+        { .kind = WASM_I32, .of.i32 = 10 },
+        { .kind = WASM_F64, .of.f64 = 0.000101 },
+        { .kind = WASM_F32, .of.f32 = 300.002 },
+    };
+
+    // pass 4 elements for function arguments
+    if (!wasm_runtime_call_wasm_a(exec_env, func, 1, results, 3, arguments)) {
+        printf("call wasm function generate_float failed. %s\n", wasm_runtime_get_exception(module_inst));
+    }
+    
+    float ret_val;
+    ret_val = results[0].of.f32;
+	
+	// TODO: return (something)ret_val;
 }
 
 HRESULT __stdcall WasmObject::Close() {
-    // Not implemented
+    if (exec_env)
+        wasm_runtime_destroy_exec_env(exec_env);
+    if (module_inst) {
+        if (wasm_buffer)
+            wasm_runtime_module_free(module_inst, wasm_buffer);
+        wasm_runtime_deinstantiate(module_inst);
+    }
+    if (module)
+        wasm_runtime_unload(module);
+    if (buffer)
+        BH_FREE(buffer);
+    wasm_runtime_destroy();
 }
