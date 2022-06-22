@@ -128,7 +128,9 @@ HRESULT __stdcall WasmObject::Exec() {
     wasm_runtime_call_wasm_a(exec_env, func, 1, NULL, 3, arguments);
 }
 
-HRESULT __stdcall WasmObject::CallFunc(LPSTR FuncName, LPVOID pArgs) {
+HRESULT __stdcall WasmObject::CallFunc(LPSTR FuncName, VARIANT Arguments) {
+    VARIANT Result;
+
     wasm_function_inst_t func = NULL;
 
     if (!(func = wasm_runtime_lookup_function(module_inst, FuncName, NULL))) {
@@ -147,10 +149,16 @@ HRESULT __stdcall WasmObject::CallFunc(LPSTR FuncName, LPVOID pArgs) {
         printf("call wasm function generate_float failed. %s\n", wasm_runtime_get_exception(module_inst));
     }
 
-    float ret_val;
-    ret_val = results[0].of.f32;
+    // Todo: 리턴 자료형 자동 판단 (가능함?)
 
-    // TODO: return (something)ret_val;
+    int ret_val;
+    ret_val = results[0].of.i32;
+
+    // set context of VARIANT
+    Result.vt = VT_INT;
+    Result.intVal = ret_val;
+
+    return Result;
 }
 
 HRESULT __stdcall WasmObject::Close() {

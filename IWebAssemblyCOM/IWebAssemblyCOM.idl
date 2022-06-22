@@ -5,6 +5,7 @@
 // 형식 라이브러리(IWebAssemblyCOM.tlb) 및 마샬링 코드를 생성합니다.
 
 import "oaidl.idl";
+import "ocidl.idl";
 import "unknwn.idl";
 
 [object, uuid(261c74a7-272a-45d2-b472-2c8d1f6de631), helpstring("WebAssembly COM interface")]
