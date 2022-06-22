@@ -69,6 +69,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(Configuration)PS\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)wasm-micro-runtime\core\shared\utils;$(SolutionDir)wasm-micro-runtime\core\iwasm\include;$(SolutionDir)wasm-micro-runtime\core\shared\utils\uncommon;$(SolutionDir)wasm-micro-runtime\core\shared\platform\windows;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IntDir>$(Configuration)PS\</IntDir>
@@ -78,13 +79,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>$(Configuration)PS\</IntDir>
+    <ExternalIncludePath>$(SolutionDir)wasm-micro-runtime\core\shared\utils;$(SolutionDir)wasm-micro-runtime\core\iwasm\include;$(SolutionDir)wasm-micro-runtime\core\shared\utils\uncommon;$(SolutionDir)wasm-micro-runtime\core\shared\platform\windows;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PreprocessorDefinitions>REGISTER_PROXY_DLL;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>kernel32.lib;rpcns4.lib;rpcrt4.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;rpcns4.lib;rpcrt4.lib;oleaut32.lib;uuid.lib;$(SolutionDir)libs\libiwasm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ModuleDefinitionFile>IWebAssemblyCOMPS.def</ModuleDefinitionFile>
       <RegisterOutput>true</RegisterOutput>
     </Link>
@@ -161,8 +163,6 @@ Exit 1
     <None Include="..\IWebAssemblyCOM\IWebAssemblyCOMps.def" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_getopt.c" />
-    <ClCompile Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_read_file.c" />
     <ClCompile Include="..\IWebAssemblyCOM\dlldata.c">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</CompileAsManaged>
@@ -206,16 +206,11 @@ Exit 1
       </PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="WasmObject.cpp" />
+    <ClCompile Include="WasmObjectFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\aot_export.h" />
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\lib_export.h" />
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\wasm_c_api.h" />
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\wasm_export.h" />
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_getopt.h" />
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_read_file.h" />
-    <ClInclude Include="..\IWebAssemblyCOM\IWebAssemblyCOM.h" />
     <ClInclude Include="WasmObject.h" />
+    <ClInclude Include="WasmObjectFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

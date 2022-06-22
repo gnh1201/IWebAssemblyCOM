@@ -36,36 +36,15 @@
     <ClCompile Include="WasmObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_read_file.c">
-      <Filter>헤더 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_getopt.c">
-      <Filter>헤더 파일</Filter>
+    <ClCompile Include="WasmObjectFactory.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WasmObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_getopt.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\shared\utils\uncommon\bh_read_file.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\lib_export.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\wasm_c_api.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\wasm_export.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\Documents\GitHub\wasm-micro-runtime\core\iwasm\include\aot_export.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="..\IWebAssemblyCOM\IWebAssemblyCOM.h">
+    <ClInclude Include="WasmObjectFactory.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
