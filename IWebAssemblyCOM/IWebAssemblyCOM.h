@@ -60,7 +60,7 @@ typedef interface IWebAssemblyCOM IWebAssemblyCOM;
 
 
 /* header files for imported files */
-#include "unknwn.h"
+#include "oaidl.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -100,10 +100,10 @@ EXTERN_C const IID IID_IWebAssemblyCOM;
         
         virtual HRESULT STDMETHODCALLTYPE Exec( void) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CallFunc( 
+        virtual HRESULT STDMETHODCALLTYPE CallFunc( 
             /* [in] */ LPSTR FuncName,
-            /* [in] */ LPVOID pArgs,
-            /* [retval][out] */ LPVOID *pResult) = 0;
+            /* [in] */ VARIANT Arguments,
+            /* [retval][out] */ VARIANT *pResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Close( void) = 0;
         
@@ -152,11 +152,11 @@ EXTERN_C const IID IID_IWebAssemblyCOM;
         HRESULT ( STDMETHODCALLTYPE *Exec )( 
             IWebAssemblyCOM * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CallFunc )( 
+        HRESULT ( STDMETHODCALLTYPE *CallFunc )( 
             IWebAssemblyCOM * This,
             /* [in] */ LPSTR FuncName,
-            /* [in] */ LPVOID pArgs,
-            /* [retval][out] */ LPVOID *pResult);
+            /* [in] */ VARIANT Arguments,
+            /* [retval][out] */ VARIANT *pResult);
         
         HRESULT ( STDMETHODCALLTYPE *Close )( 
             IWebAssemblyCOM * This);
@@ -202,8 +202,8 @@ EXTERN_C const IID IID_IWebAssemblyCOM;
 #define IWebAssemblyCOM_Exec(This)	\
     ( (This)->lpVtbl -> Exec(This) ) 
 
-#define IWebAssemblyCOM_CallFunc(This,FuncName,pArgs,pResult)	\
-    ( (This)->lpVtbl -> CallFunc(This,FuncName,pArgs,pResult) ) 
+#define IWebAssemblyCOM_CallFunc(This,FuncName,Arguments,pResult)	\
+    ( (This)->lpVtbl -> CallFunc(This,FuncName,Arguments,pResult) ) 
 
 #define IWebAssemblyCOM_Close(This)	\
     ( (This)->lpVtbl -> Close(This) ) 
@@ -232,6 +232,11 @@ EXTERN_C const IID LIBID_WebAssemblyCOM;
 #endif /* __WebAssemblyCOM_LIBRARY_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
+
+unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
+unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
+void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
 /* end of Additional Prototypes */
 

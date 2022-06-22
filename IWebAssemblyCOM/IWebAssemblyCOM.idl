@@ -1,0 +1,31 @@
+﻿// IWebAssemblyCOM.idl: IWebAssemblyCOM의 IDL 소스
+//
+
+// 이 파일은 MIDL 도구에 의해 처리되어
+// 형식 라이브러리(IWebAssemblyCOM.tlb) 및 마샬링 코드를 생성합니다.
+
+import "oaidl.idl";
+import "unknwn.idl";
+
+[object, uuid(261c74a7-272a-45d2-b472-2c8d1f6de631), helpstring("WebAssembly COM interface")]
+interface IWebAssemblyCOM : IUnknown
+{
+	HRESULT AddWasiEnv([in] LPSTR Key, [in] LPSTR Value);
+	HRESULT AddWasiDir([in] LPSTR Dir);
+	HRESULT SetStackSize([in] int Size);
+	HRESULT SetHeapSize([in] int Size);
+	HRESULT Open([in] LPSTR FilePath);
+	HRESULT Exec();
+	// Result = CallFunc("foo", Array(1, 2, 3))
+	HRESULT CallFunc([in] LPSTR FuncName, [in] VARIANT Arguments, [out, retval] VARIANT *pResult);
+	HRESULT Close();
+};
+
+[uuid(f373d9ea-1e49-4831-9753-a092c6a326ee), helpstring("WebAssembly COM library")]
+library WebAssemblyCOM
+{
+	importlib("stdole32.tlb");
+	importlib("stdole2.tlb");
+
+	interface IWebAssemblyCOM;
+}

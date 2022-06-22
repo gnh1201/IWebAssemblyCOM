@@ -1,30 +1,28 @@
 /*
- * WasmObject.h
+ * WasmObject.cpp
  * WebAssembly COM interface
- 
+
  * [IWebAssemblyCOM]
- * Copyright (C) 2022 AsmNext Team.  All rights reserved. 
+ * Copyright (C) 2022 AsmNext Team.  All rights reserved.
  * SPDX-License-Identifier: BSD-3-Clause
 
  * [wasm-micro-runtime]
- * Copyright (C) 2019 Intel Corporation.  All rights reserved. 
+ * Copyright (C) 2019 Intel Corporation.  All rights reserved.
  * SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 */
 
-#include <objbase.h>
-
 #include "WasmObject.h"
-#include "IWebAssemblyCOM_i.c"
 
-HRESULT __stdcall WasmObject::QueryInterface(REFIID riid, void ** ppObj) {
+HRESULT __stdcall WasmObject::QueryInterface(REFIID riid, void** ppObj) {
+    /*
     if (riid == IID_IUnknown) {
-        * ppObj = static_cast(this);
+        *ppObj = static_cast(this);
         AddRef();
         return S_OK;
     }
 
     if (riid == IID_IAdd) {
-        * ppObj = static_cast(this);
+        *ppObj = static_cast(this);
         AddRef();
         return S_OK;
     }
@@ -34,8 +32,9 @@ HRESULT __stdcall WasmObject::QueryInterface(REFIID riid, void ** ppObj) {
     //we do not satisfy the required interface
     //
 
-    * ppObj = NULL;
+    *ppObj = NULL;
     return E_NOINTERFACE;
+    */
 } // QueryInterface method
 
 ULONG __stdcall WasmObject::AddRef() {
@@ -100,7 +99,7 @@ HRESULT __stdcall WasmObject::Open(LPSTR FilePath) {
     }
 
     module_inst = wasm_runtime_instantiate(module, stack_size, heap_size,
-                                           error_buf, sizeof(error_buf));
+        error_buf, sizeof(error_buf));
 
     if (!module_inst) {
         printf("Instantiate wasm module failed. error: %s\n", error_buf);
@@ -119,14 +118,14 @@ HRESULT __stdcall WasmObject::Exec() {
         printf("Could not find main()");
         Close();
     }
-	
+
     wasm_val_t arguments[3] = {
-        { .kind = WASM_I32, .of.i32 = 10 },
-        { .kind = WASM_F64, .of.f64 = 0.000101 },
-        { .kind = WASM_F32, .of.f32 = 300.002 },
+        {.kind = WASM_I32, .of.i32 = 10 },
+        {.kind = WASM_F64, .of.f64 = 0.000101 },
+        {.kind = WASM_F32, .of.f32 = 300.002 },
     };
 
-	wasm_runtime_call_wasm_a(exec_env, func, 1, NULL, 3, arguments);
+    wasm_runtime_call_wasm_a(exec_env, func, 1, NULL, 3, arguments);
 }
 
 HRESULT __stdcall WasmObject::CallFunc(LPSTR FuncName, LPVOID pArgs) {
@@ -136,22 +135,22 @@ HRESULT __stdcall WasmObject::CallFunc(LPSTR FuncName, LPVOID pArgs) {
         printf("The generate_float wasm function is not found.\n");
     }
 
-    wasm_val_t results[1] = { { .kind = WASM_F32, .of.f32 = 0 } };
+    wasm_val_t results[1] = { {.kind = WASM_F32, .of.f32 = 0 } };
     wasm_val_t arguments[3] = {
-        { .kind = WASM_I32, .of.i32 = 10 },
-        { .kind = WASM_F64, .of.f64 = 0.000101 },
-        { .kind = WASM_F32, .of.f32 = 300.002 },
+        {.kind = WASM_I32, .of.i32 = 10 },
+        {.kind = WASM_F64, .of.f64 = 0.000101 },
+        {.kind = WASM_F32, .of.f32 = 300.002 },
     };
 
     // pass 4 elements for function arguments
     if (!wasm_runtime_call_wasm_a(exec_env, func, 1, results, 3, arguments)) {
         printf("call wasm function generate_float failed. %s\n", wasm_runtime_get_exception(module_inst));
     }
-    
+
     float ret_val;
     ret_val = results[0].of.f32;
-	
-	// TODO: return (something)ret_val;
+
+    // TODO: return (something)ret_val;
 }
 
 HRESULT __stdcall WasmObject::Close() {
