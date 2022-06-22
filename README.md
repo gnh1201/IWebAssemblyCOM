@@ -18,3 +18,4 @@ This project is the part of [WelsonJS](https://github.com/gnh1201/welsonjs) fram
  * https://lowleveldesign.org/2010/10/02/creating-a-simple-com-component-in-c/
  * https://www.codeproject.com/Questions/311668/Cplusplus-COM-object-returns-null-in-VB6
  * https://stackoverflow.com/questions/15367223/return-value-from-dll-function
+ * https://www.codeproject.com/Articles/505791/Writing-Simple-COM-ATL-DLL-for-VS2012
