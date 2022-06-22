@@ -19,4 +19,4 @@ This project is the part of [WelsonJS](https://github.com/gnh1201/welsonjs) fram
  * https://www.codeproject.com/Questions/311668/Cplusplus-COM-object-returns-null-in-VB6
  * https://stackoverflow.com/questions/15367223/return-value-from-dll-function
  * https://www.codeproject.com/Articles/505791/Writing-Simple-COM-ATL-DLL-for-VS2012
- * https://social.msdn.microsoft.com/Forums/en-US/a67eb0d9-6ff3-4853-ad32-0d3e155ee3b2/passing-variant-from-vbscript-code-to-com-dll-method-that-accepts-long-as-parameter-?forum=vcmfcatl
+ * https://social.msdn.microsoft.com/Forums/en-US/4566071d-a49e-4991-8adc-3b3472fc8a65/pass-arrays-to-com-interfaces-via-vbscript?forum=vcgeneral
